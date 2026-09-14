@@ -7,7 +7,14 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 find_package(OpenSSL 3.5 REQUIRED COMPONENTS Crypto)
-find_package(Boost REQUIRED)
+
+# Electric Money only requires Boost.Multiprecision.
+# We intentionally avoid the full Boost metapackage.
+find_path(
+    BOOST_MULTIPRECISION_INCLUDE_DIR
+    NAMES boost/multiprecision/cpp_int.hpp
+    REQUIRED
+)
 
 if(WIN32)
     find_package(json-c CONFIG REQUIRED)
@@ -38,7 +45,8 @@ add_library(em_modules STATIC ${EM_MODULES})
 target_include_directories(
     em_modules
     PUBLIC
-    ${Boost_INCLUDE_DIRS}
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${BOOST_MULTIPRECISION_INCLUDE_DIR}
 )
 
 target_link_libraries(
@@ -74,20 +82,10 @@ else()
 endif()
 
 add_executable(electric_money src/main.cpp)
-
-target_link_libraries(
-    electric_money
-    PRIVATE
-    em_modules
-)
+target_link_libraries(electric_money PRIVATE em_modules)
 
 add_executable(em_tests tests/test_self.cpp)
-
-target_link_libraries(
-    em_tests
-    PRIVATE
-    em_modules
-)
+target_link_libraries(em_tests PRIVATE em_modules)
 
 enable_testing()
 
@@ -97,12 +95,7 @@ add_test(
 )
 
 add_executable(em_hardening tests/hardening.cpp)
-
-target_link_libraries(
-    em_hardening
-    PRIVATE
-    em_modules
-)
+target_link_libraries(em_hardening PRIVATE em_modules)
 
 add_test(
     NAME em_hardening
@@ -110,12 +103,7 @@ add_test(
 )
 
 add_executable(em_consensus_vectors tests/consensus_vectors.cpp)
-
-target_link_libraries(
-    em_consensus_vectors
-    PRIVATE
-    em_modules
-)
+target_link_libraries(em_consensus_vectors PRIVATE em_modules)
 
 add_test(
     NAME em_consensus_vectors
@@ -123,12 +111,7 @@ add_test(
 )
 
 add_executable(em_consensus_transition tests/consensus_transition.cpp)
-
-target_link_libraries(
-    em_consensus_transition
-    PRIVATE
-    em_modules
-)
+target_link_libraries(em_consensus_transition PRIVATE em_modules)
 
 add_test(
     NAME em_consensus_transition
@@ -136,12 +119,7 @@ add_test(
 )
 
 add_executable(em_l2_bridge_gate tests/l2_bridge_gate.cpp)
-
-target_link_libraries(
-    em_l2_bridge_gate
-    PRIVATE
-    em_modules
-)
+target_link_libraries(em_l2_bridge_gate PRIVATE em_modules)
 
 add_test(
     NAME em_l2_bridge_gate
