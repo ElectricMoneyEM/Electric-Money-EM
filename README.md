@@ -2,12 +2,7 @@
   <img src="assets/Electric-Coin-Logo.png" width="700">
 </p>
 
-# Electric Money (EM) — V20.7.6 Oracle  Removed
-
-Electric Money (EM) is an experimental blockchain project. V20.7.6 removes the
-V19.2 monolithic oracle after the modular implementation passed the available
-deterministic consensus, state-transition, persistence/reorg, and L2/bridge
-verification gates.
+# Electric Money (EM) — V20.7.6
 
 **NOT production/mainnet cryptocurrency software. Do not use for real funds.**
 
