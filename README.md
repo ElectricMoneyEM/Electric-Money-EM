@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/Electric-Coin-Logo.png" width="700">
+  <img src="assets/electric-coin-logo.png" width="700">
 </p>
 
 # Electric Money (EM) — V20.7.6
