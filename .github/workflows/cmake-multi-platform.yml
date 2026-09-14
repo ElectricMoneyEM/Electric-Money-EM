@@ -21,7 +21,7 @@ jobs:
 
       - name: Build OpenSSL 3.5
         run: |
-          git clone --depth 1 --branch openssl-3.5.9 https://github.com/openssl/openssl.git "$HOME/openssl-3.5"
+          git clone --depth 1 --branch openssl-3.5.8 https://github.com/openssl/openssl.git "$HOME/openssl-3.5"
           cd "$HOME/openssl-3.5"
           ./Configure --prefix="$HOME/openssl-3.5-install" --openssldir="$HOME/openssl-3.5-install/ssl" no-shared
           make -j2
