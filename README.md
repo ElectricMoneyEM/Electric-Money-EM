@@ -38,7 +38,6 @@ There is no `legacy/` oracle dependency.
 - Source-tree oracle-reference scan: PASS
 
 ## Security status
-**NOT MAINNET READY.** Removal of the oracle does not constitute a security
-audit or proof of consensus correctness. External review, broader fuzzing,
+**NOT MAINNET READY.** External review, broader fuzzing,
 fault-injection, adversarial P2P testing, economic simulations, and public
 testnet testing remain necessary.
