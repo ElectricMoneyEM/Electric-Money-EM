@@ -7,6 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 find_package(OpenSSL 3.5 REQUIRED COMPONENTS Crypto)
+find_package(Boost REQUIRED)
 
 if(WIN32)
     find_package(json-c CONFIG REQUIRED)
@@ -33,6 +34,12 @@ set(EM_MODULES
 )
 
 add_library(em_modules STATIC ${EM_MODULES})
+
+target_include_directories(
+    em_modules
+    PUBLIC
+    ${Boost_INCLUDE_DIRS}
+)
 
 target_link_libraries(
     em_modules
