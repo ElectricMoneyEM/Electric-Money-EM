@@ -7,23 +7,60 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest, windows-latest]
-
-    runs-on: ${{ matrix.os }}
+  ubuntu:
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
+
+      - name: Install base dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake pkg-config libjson-c-dev perl
+
+      - name: Build OpenSSL 3.5
+        run: |
+          git clone --depth 1 --branch openssl-3.5.9 https://github.com/openssl/openssl.git "$HOME/openssl-3.5"
+          cd "$HOME/openssl-3.5"
+          ./Configure --prefix="$HOME/openssl-3.5-install" --openssldir="$HOME/openssl-3.5-install/ssl" no-shared
+          make -j2
+          make install_sw
+          echo "OPENSSL_ROOT_DIR=$HOME/openssl-3.5-install" >> "$GITHUB_ENV"
+          echo "CMAKE_PREFIX_PATH=$HOME/openssl-3.5-install" >> "$GITHUB_ENV"
 
       - name: Configure CMake
-        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DOPENSSL_ROOT_DIR="$OPENSSL_ROOT_DIR"
 
       - name: Build
-        run: cmake --build build --config Release --parallel
+        run: cmake --build build --config Release --parallel 2
+
+      - name: Test
+        working-directory: build
+        run: ctest --build-config Release --output-on-failure
+
+  windows:
+    runs-on: windows-2025
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Install dependencies with vcpkg
+        shell: pwsh
+        run: |
+          & "$env:VCPKG_INSTALLATION_ROOT\vcpkg.exe" install json-c:x64-windows openssl:x64-windows
+
+      - name: Configure CMake
+        shell: pwsh
+        run: |
+          cmake -S . -B build `
+            -DCMAKE_BUILD_TYPE=Release `
+            -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake" `
+            -DVCPKG_TARGET_TRIPLET=x64-windows
+
+      - name: Build
+        run: cmake --build build --config Release --parallel 2
 
       - name: Test
         working-directory: build
