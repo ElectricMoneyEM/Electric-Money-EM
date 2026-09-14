@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/electric-money-logo.png" width="700">
+</p>
+
 # Electric Money (EM) — V20.7.6 Oracle  Removed
 
 Electric Money (EM) is an experimental blockchain project. V20.7.6 removes the
