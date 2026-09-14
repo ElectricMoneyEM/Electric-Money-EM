@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/electric-money-logo.png" width="700">
+  <img src="assets/Electric-Coin-Logo.png" width="700">
 </p>
 
 # Electric Money (EM) — V20.7.6 Oracle  Removed
